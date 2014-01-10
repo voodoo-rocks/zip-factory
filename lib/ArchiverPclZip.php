@@ -34,63 +34,107 @@
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 
-/**
- * ArchiverPclZip class
- *
- * @category  Tests
- * @package   ZipFactory
- * @author    Yani Iliev <yani@iliev.me>
- * @copyright 2014 Yani Iliev
- * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.0
- * @link      https://github.com/yani-/zip-factory/
- */
-class ArchiverPclZip implements ArchiverInterface
-{
-    /**
-     * [__constructor description]
-     * @param  [type] $file [description]
-     * @return [type]       [description]
-     */
-    public function __constructor($file)
-    {
+if (function_exists('gzopen')) {
 
+    if (!class_exists('PclZip')) {
+        require_once dirname(__FILE__) .
+                     DIRECTORY_SEPARATOR .
+                     'vendor' .
+                     DIRECTORY_SEPARATOR .
+                     'pclzip-2-8-2' .
+                     DIRECTORY_SEPARATOR .
+                     'pclzip.lib.php';
     }
 
     /**
-     * [addFile description]
-     * @param [type] $file [description]
-     * @param [type] $name [description]
+     * ArchiverPclZip class
+     *
+     * @category  Tests
+     * @package   ZipFactory
+     * @author    Yani Iliev <yani@iliev.me>
+     * @copyright 2014 Yani Iliev
+     * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
+     * @version   GIT: 1.0.0
+     * @link      https://github.com/yani-/zip-factory/
      */
-    public function addFile($file, $name)
+    class ArchiverPclZip implements ArchiverInterface
     {
+        /**
+         * [$archive description]
+         * @var [type]
+         */
+        protected $archive  = null;
 
-    }
+        /**
+         * [$archive description]
+         * @var [type]
+         */
+        protected $pclzip  = null;
 
-    /**
-     * [addDir description]
-     * @param [type] $dir  [description]
-     * @param [type] $name [description]
-     */
-    public function addDir($dir, $name)
-    {
+        /**
+         * [__construct description]
+         * @param  [type] $file [description]
+         * @return [type]       [description]
+         */
+        public function __construct($file)
+        {
+            if (is_resource($file)) {
+                $meta = stream_get_meta_data($file);
+                $this->archive = $meta['uri'];
+                $this->pclzip  = new PclZip($this->archive);
+            } else {
+                $this->archive = $file;
+                $this->pclzip  = new PclZip($this->archive);
+            }
+        }
 
-    }
+        /**
+         * [addFile description]
+         * @param [type] $file [description]
+         * @param [type] $dir [description]
+         */
+        public function addFile($file, $dir)
+        {
+            $this->pclzip->add($file, $dir);
+        }
 
-    /**
-     * [addFromString description]
-     */
-    public function addFromString()
-    {
+        /**
+         * [addDir description]
+         * @param [type] $dir  [description]
+         * @param [type] $name [description]
+         */
+        public function addDir($dir, $name)
+        {
+            $this->pclzip->add($dir, $name);
+        }
 
-    }
+        /**
+         * [addFromString description]
+         * @param [type] $name    [description]
+         * @param [type] $content [description]
+         */
+        public function addFromString($name, $content)
+        {
+            // create temporary file
+            $_file = tmpfile();
 
-    /**
-     * [getArchive description]
-     * @return [type] [description]
-     */
-    public function getArchive()
-    {
+            // get tmp file meta date
+            $meta = stream_get_meta_data($_file);
 
+            // write content to the file
+            fwrite($meta['uri'], $content);
+
+            // pass the file to the archiver
+            $this->add($meta['uri']);
+        }
+
+        /**
+         * [getArchive description]
+         * @return [type] [description]
+         */
+        public function getArchive()
+        {
+            return $this->archive;
+        }
     }
 }

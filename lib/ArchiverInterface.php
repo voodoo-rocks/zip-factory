@@ -46,11 +46,11 @@
 interface ArchiverInterface
 {
     /**
-     * [__constructor description]
+     * [__construct description]
      * @param  [type] $file [description]
      * @return [type]       [description]
      */
-    public function __constructor($file);
+    public function __construct($file);
 
     /**
      * [addFile description]
@@ -68,8 +68,10 @@ interface ArchiverInterface
 
     /**
      * [addFromString description]
+     * @param [type] $name    [description]
+     * @param [type] $content [description]
      */
-    public function addFromString();
+    public function addFromString($name, $content);
 
     /**
      * [getArchive description]

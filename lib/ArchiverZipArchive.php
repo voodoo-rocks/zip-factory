@@ -34,63 +34,123 @@
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 
-/**
- * ArchiverZipArchive class
- *
- * @category  Tests
- * @package   ZipFactory
- * @author    Yani Iliev <yani@iliev.me>
- * @copyright 2014 Yani Iliev
- * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.0
- * @link      https://github.com/yani-/zip-factory/
- */
-class ArchiverZipArchive implements ArchiverInterface
-{
+if ( class_exists( 'ZipArchive' ) ) {
     /**
-     * [__constructor description]
-     * @param  [type] $file [description]
-     * @return [type]       [description]
+     * ArchiverZipArchive class
+     *
+     * @category  Tests
+     * @package   ZipFactory
+     * @author    Yani Iliev <yani@iliev.me>
+     * @copyright 2014 Yani Iliev
+     * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
+     * @version   GIT: 1.0.0
+     * @link      https://github.com/yani-/zip-factory/
      */
-    public function __constructor($file)
+    class ArchiverZipArchive extends ZipArchive implements ArchiverInterface
     {
+        /**
+         * [$archive description]
+         * @var [type]
+         */
+        protected $archive  = null;
 
-    }
+        /**
+         * [$root_dir description]
+         * @var [type]
+         */
+        protected $root_dir = null;
 
-    /**
-     * [addFile description]
-     * @param [type] $file [description]
-     * @param [type] $name [description]
-     */
-    public function addFile($file, $name)
-    {
+        /**
+         * [__construct description]
+         * @param  [type] $file [description]
+         * @return [type]       [description]
+         */
+        public function __construct($file)
+        {
+            if (is_resource($file)) {
+                $meta = stream_get_meta_data($file);
+                $this->archive = $meta['uri'];
+            } else {
+                $this->archive = $file;
+            }
 
-    }
+            // Open Archive File
+            if (!($this->open($this->archive) === true)) {
+                throw new RuntimeException('Archive file cound not be created.');
+            }
+        }
 
-    /**
-     * [addDir description]
-     * @param [type] $dir  [description]
-     * @param [type] $name [description]
-     */
-    public function addDir($dir, $name)
-    {
+        /**
+         * [addFile description]
+         * @param [type] $file [description]
+         * @param [type] $name [description]
+         */
+        public function addFile($file, $name)
+        {
+            parent::addFile($file, $name);
+        }
 
-    }
+        /**
+         * [addDir description]
+         * @param [type] $dir  [description]
+         * @param [type] $name [description]
+         */
+        public function addDir($path, $parent_dir = null, $include = array())
+        {
+            // Use Recursive functions
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($path),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
 
-    /**
-     * [addFromString description]
-     */
-    public function addFromString()
-    {
+            // Prepare File Filter Pattern
+            $file_pattern = null;
+            if (is_array($include)) {
+                $filters = array();
+                foreach ($include as $file) {
+                    $filters[] = str_replace('\.\*', '.*' , preg_quote($file, '/'));
+                }
 
-    }
+                $file_pattern = implode('|', $filters);
+            }
 
-    /**
-     * [getArchive description]
-     * @return [type] [description]
-     */
-    public function getArchive()
-    {
+            foreach ($iterator as $item) {
+                // Skip dots
+                if ($iterator->isDot()) continue;
 
+                // Validate file pattern
+                if ($file_pattern) {
+                    if (!preg_match('/^(' . $file_pattern . ')$/', $iterator->getSubPathName())) {
+                        continue;
+                    }
+                }
+
+                // Add to archive
+                if ($item->isDir()) {
+                    $this->addEmptyDir($parent_dir . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                } else {
+                    $this->addFile($item->getPathname(), $parent_dir . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                }
+            }
+        }
+
+        /**
+         * [addFromString description]
+         * @param [type] $name    [description]
+         * @param [type] $content [description]
+         */
+        public function addFromString($name, $content)
+        {
+            parent::addFromString($name, $content);
+        }
+
+        /**
+         * [getArchive description]
+         * @return [type] [description]
+         */
+        public function getArchive()
+        {
+            return $this->archive;
+        }
     }
 }
