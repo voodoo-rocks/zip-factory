@@ -125,10 +125,10 @@ if (function_exists('gzopen')) {
             $meta = stream_get_meta_data($_file);
 
             // write content to the file
-            fwrite($meta['uri'], $content);
+            fwrite($_file, $content);
 
             // pass the file to the archiver
-            $this->add($meta['uri']);
+            $this->addFile($meta['uri']);
         }
 
         /**
