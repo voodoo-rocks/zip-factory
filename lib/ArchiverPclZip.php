@@ -102,12 +102,13 @@ if (function_exists('gzopen')) {
 
         /**
          * [addDir description]
-         * @param [type] $dir  [description]
-         * @param [type] $name [description]
+         * @param [type] $path       [description]
+         * @param [type] $parent_dir [description]
+         * @param array  $include    [description]
          */
-        public function addDir($dir, $name)
+        public function addDir($path, $parent_dir = null, $include = array())
         {
-            $this->pclzip->add($dir, $name);
+            $this->pclzip->add($path, $parent_dir);
         }
 
         /**
