@@ -45,7 +45,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
  * @version   GIT: 1.0.0
  * @link      https://github.com/yani-/zip-factory/
  */
-class ArchiverZipArchive implements Archiver
+class ArchiverZipArchive implements ArchiverInterface
 {
 
 }
