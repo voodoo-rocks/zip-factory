@@ -38,8 +38,14 @@ class ZipFactory
      * [makeZip description]
      * @return [type] [description]
      */
-    public static function makeZip()
+    public static function makeZipArchiver($file, $pclZip = false)
     {
-
+        if ($pclZip) {
+            require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverPclZip.php';
+            return new ArchiverPclZip($file);
+        } else {
+            require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverZipArchive.php';
+            return new ArchiverZipArchive($file);
+        }
     }
 }

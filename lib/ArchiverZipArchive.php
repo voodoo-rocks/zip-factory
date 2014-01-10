@@ -47,5 +47,50 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
  */
 class ArchiverZipArchive implements ArchiverInterface
 {
+    /**
+     * [__constructor description]
+     * @param  [type] $file [description]
+     * @return [type]       [description]
+     */
+    public function __constructor($file)
+    {
 
+    }
+
+    /**
+     * [addFile description]
+     * @param [type] $file [description]
+     * @param [type] $name [description]
+     */
+    public function addFile($file, $name)
+    {
+
+    }
+
+    /**
+     * [addDir description]
+     * @param [type] $dir  [description]
+     * @param [type] $name [description]
+     */
+    public function addDir($dir, $name)
+    {
+
+    }
+
+    /**
+     * [addFromString description]
+     */
+    public function addFromString()
+    {
+
+    }
+
+    /**
+     * [getArchive description]
+     * @return [type] [description]
+     */
+    public function getArchive()
+    {
+
+    }
 }
