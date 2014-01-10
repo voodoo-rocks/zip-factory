@@ -82,12 +82,14 @@ if ( class_exists( 'ZipArchive' ) ) {
 
         /**
          * [addFile description]
-         * @param [type] $file [description]
-         * @param [type] $name [description]
+         * @param [type] $filepath  [description]
+         * @param [type] $entryname [description]
+         * @param [type] $start     [description]
+         * @param [type] $length    [description]
          */
-        public function addFile($file, $name)
+        public function addFile($filepath, $entryname = NULL, $start = NULL, $length = NULL)
         {
-            parent::addFile($file, $name);
+            parent::addFile($filepath, $entryname, $start, $length);
         }
 
         /**

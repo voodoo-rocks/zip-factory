@@ -90,12 +90,14 @@ if (function_exists('gzopen')) {
 
         /**
          * [addFile description]
-         * @param [type] $file [description]
-         * @param [type] $dir [description]
+         * @param [type] $filepath  [description]
+         * @param [type] $entryname [description]
+         * @param [type] $start     [description]
+         * @param [type] $length    [description]
          */
-        public function addFile($file, $dir)
+        public function addFile($filepath, $entryname = NULL, $start = NULL, $length = NULL)
         {
-            $this->pclzip->add($file, $dir);
+            $this->pclzip->add($filepath, $entryname);
         }
 
         /**
