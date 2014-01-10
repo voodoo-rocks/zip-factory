@@ -1,9 +1,9 @@
 {
-    "name": "bandar/bandar",
+    "name": "zip-factory/zip-factory",
     "type": "library",
-    "description": "Fully tested, super minimalistic PHP template engine for PHP 5.2, 5.3, 5.4, 5.5",
-    "keywords": ["template", "template engine", "engine"],
-    "homepage": "http://github.com/yani-/bandar",
+    "description": "Factory class that creates either ZipArchive or PclZip PHP 5.2.17 and up",
+    "keywords": ["ziparchive", "zip", "zipfactory"],
+    "homepage": "http://github.com/yani-/zip-factory",
     "license": "MIT",
     "authors": [
         {
