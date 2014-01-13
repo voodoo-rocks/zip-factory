@@ -191,13 +191,14 @@ if (class_exists('ZipArchive')) {
         /**
          * [extractTo description]
          *
-         * @param string $destination [description]
+         * @param string $pathto Path to extract to
+         * @param mixed  $files  Optional files parameter
          *
          * @return [type]              [description]
          */
-        public function extractTo(string $destination)
+        public function extractTo($pathto, $files = null)
         {
-            parent::extractTo($destination);
+            parent::extractTo($pathto);
         }
     }
 }
