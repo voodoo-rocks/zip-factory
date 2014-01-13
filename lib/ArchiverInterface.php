@@ -97,4 +97,13 @@ interface ArchiverInterface
      * @return [type] [description]
      */
     public function getArchive();
+
+    /**
+     * [extractTo description]
+     *
+     * @param string $destination [description]
+     *
+     * @return [type]              [description]
+     */
+    public function extractTo(string $destination);
 }

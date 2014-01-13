@@ -164,5 +164,17 @@ if (function_exists('gzopen')) {
         {
             return $this->archive;
         }
+
+        /**
+         * [extractTo description]
+         *
+         * @param string $destination [description]
+         *
+         * @return [type]              [description]
+         */
+        public function extractTo(string $destination)
+        {
+            $this->archive->extract(PCLZIP_OPT_PATH, $destination);
+        }
     }
 }

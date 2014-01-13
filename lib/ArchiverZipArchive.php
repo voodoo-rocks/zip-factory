@@ -187,5 +187,17 @@ if (class_exists('ZipArchive')) {
         {
             return $this->archive;
         }
+
+        /**
+         * [extractTo description]
+         *
+         * @param string $destination [description]
+         *
+         * @return [type]              [description]
+         */
+        public function extractTo(string $destination)
+        {
+            parent::extractTo($destination);
+        }
     }
 }
