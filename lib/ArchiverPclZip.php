@@ -139,17 +139,14 @@ if (function_exists('gzopen')) {
          */
         public function addFromString($name, $content)
         {
-            // create temporary file
-            $_file = tmpfile();
-
-            // get tmp file meta date
-            $meta = stream_get_meta_data($_file);
-
-            // write content to the file
-            fwrite($_file, $content);
-
-            // pass the file to the archiver
-            $this->addFile($meta['uri']);
+            $this->pclzip->add(
+                array(
+                    array(
+                        PCLZIP_ATT_FILE_NAME    => $name,
+                        PCLZIP_ATT_FILE_CONTENT => $content
+                    )
+                )
+            );
         }
 
         /**
