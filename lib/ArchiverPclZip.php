@@ -129,7 +129,9 @@ if (function_exists('gzopen')) {
             $this->pclzip->add(
                 $path,
                 PCLZIP_OPT_REMOVE_PATH,
-                preg_replace('/\/' . $name . '$/', '', $path)
+                $path,
+                PCLZIP_OPT_ADD_PATH,
+                $name
             );
         }
 
