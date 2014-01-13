@@ -32,19 +32,37 @@
  * @link      https://github.com/yani-/zip-factory/
  */
 
+/**
+ * ZipFactory class
+ *
+ * @category  Tests
+ * @package   ZipFactory
+ * @author    Yani Iliev <yani@iliev.me>
+ * @copyright 2014 Yani Iliev
+ * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
+ * @link      https://github.com/yani-/zip-factory/
+ */
 class ZipFactory
 {
     /**
      * [makeZip description]
+     *
+     * @param [type] $file   [description]
+     * @param [type] $pclZip [description]
+     *
      * @return [type] [description]
      */
     public static function makeZipArchiver($file, $pclZip = false)
     {
         if ($pclZip) {
-            require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverPclZip.php';
+            include_once dirname(__FILE__) .
+                         DIRECTORY_SEPARATOR .
+                         'ArchiverPclZip.php';
             return new ArchiverPclZip($file);
         } else {
-            require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverZipArchive.php';
+            include_once dirname(__FILE__) .
+                         DIRECTORY_SEPARATOR .
+                         'ArchiverZipArchive.php';
             return new ArchiverZipArchive($file);
         }
     }

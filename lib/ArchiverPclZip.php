@@ -37,7 +37,7 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 if (function_exists('gzopen')) {
 
     if (!class_exists('PclZip')) {
-        require_once dirname(__FILE__) .
+        include_once dirname(__FILE__) .
                      DIRECTORY_SEPARATOR .
                      'vendor' .
                      DIRECTORY_SEPARATOR .
@@ -54,7 +54,6 @@ if (function_exists('gzopen')) {
      * @author    Yani Iliev <yani@iliev.me>
      * @copyright 2014 Yani Iliev
      * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
-     * @version   GIT: 1.0.0
      * @link      https://github.com/yani-/zip-factory/
      */
     class ArchiverPclZip implements ArchiverInterface
@@ -73,7 +72,9 @@ if (function_exists('gzopen')) {
 
         /**
          * [__construct description]
-         * @param  [type] $file [description]
+         *
+         * @param [type] $file [description]
+         *
          * @return [type]       [description]
          */
         public function __construct($file)
@@ -90,21 +91,38 @@ if (function_exists('gzopen')) {
 
         /**
          * [addFile description]
+         *
          * @param [type] $filepath  [description]
          * @param [type] $entryname [description]
          * @param [type] $start     [description]
          * @param [type] $length    [description]
+         *
+         * @return null
          */
-        public function addFile($filepath, $entryname = NULL, $start = NULL, $length = NULL)
-        {
-            $this->pclzip->add($filepath, $entryname);
+        public function addFile(
+            $filepath,
+            $entryname = null,
+            $start = null,
+            $length = null
+        ) {
+            $this->pclzip->add(
+                array(
+                    array(
+                        PCLZIP_ATT_FILE_NAME    => $entryname,
+                        PCLZIP_ATT_FILE_CONTENT => file_get_contents($filepath)
+                    )
+                )
+            );
         }
 
         /**
          * [addDir description]
+         *
          * @param [type] $path       [description]
          * @param [type] $parent_dir [description]
          * @param array  $include    [description]
+         *
+         * @return  null
          */
         public function addDir($path, $parent_dir = null, $include = array())
         {
@@ -113,8 +131,11 @@ if (function_exists('gzopen')) {
 
         /**
          * [addFromString description]
+         *
          * @param [type] $name    [description]
          * @param [type] $content [description]
+         *
+         * @return  null [description]
          */
         public function addFromString($name, $content)
         {
@@ -133,6 +154,7 @@ if (function_exists('gzopen')) {
 
         /**
          * [getArchive description]
+         *
          * @return [type] [description]
          */
         public function getArchive()

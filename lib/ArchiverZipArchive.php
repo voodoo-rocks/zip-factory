@@ -34,7 +34,7 @@
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 
-if ( class_exists( 'ZipArchive' ) ) {
+if (class_exists('ZipArchive')) {
     /**
      * ArchiverZipArchive class
      *
@@ -43,7 +43,6 @@ if ( class_exists( 'ZipArchive' ) ) {
      * @author    Yani Iliev <yani@iliev.me>
      * @copyright 2014 Yani Iliev
      * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
-     * @version   GIT: 1.0.0
      * @link      https://github.com/yani-/zip-factory/
      */
     class ArchiverZipArchive extends ZipArchive implements ArchiverInterface
@@ -62,7 +61,9 @@ if ( class_exists( 'ZipArchive' ) ) {
 
         /**
          * [__construct description]
-         * @param  [type] $file [description]
+         *
+         * @param [type] $file [description]
+         *
          * @return [type]       [description]
          */
         public function __construct($file)
@@ -82,20 +83,31 @@ if ( class_exists( 'ZipArchive' ) ) {
 
         /**
          * [addFile description]
+         *
          * @param [type] $filepath  [description]
          * @param [type] $entryname [description]
          * @param [type] $start     [description]
          * @param [type] $length    [description]
+         *
+         * @return  null [description]
          */
-        public function addFile($filepath, $entryname = NULL, $start = NULL, $length = NULL)
-        {
+        public function addFile(
+            $filepath,
+            $entryname = null,
+            $start = null,
+            $length = null
+        ) {
             parent::addFile($filepath, $entryname, $start, $length);
         }
 
         /**
          * [addDir description]
-         * @param [type] $dir  [description]
-         * @param [type] $name [description]
+         *
+         * @param [type] $path       [description]
+         * @param [type] $parent_dir [description]
+         * @param array  $include    [description]
+         *
+         * @return null [description]
          */
         public function addDir($path, $parent_dir = null, $include = array())
         {
@@ -110,7 +122,10 @@ if ( class_exists( 'ZipArchive' ) ) {
             if (is_array($include)) {
                 $filters = array();
                 foreach ($include as $file) {
-                    $filters[] = str_replace('\.\*', '.*' , preg_quote($file, '/'));
+                    $filters[] = str_replace(
+                        '\.\*', '.*',
+                        preg_quote($file, '/')
+                    );
                 }
 
                 $file_pattern = implode('|', $filters);
@@ -118,28 +133,45 @@ if ( class_exists( 'ZipArchive' ) ) {
 
             foreach ($iterator as $item) {
                 // Skip dots
-                if ($iterator->isDot()) continue;
+                if ($iterator->isDot()) {
+                    continue;
+                }
 
                 // Validate file pattern
                 if ($file_pattern) {
-                    if (!preg_match('/^(' . $file_pattern . ')$/', $iterator->getSubPathName())) {
+                    if (!preg_match(
+                        '/^(' . $file_pattern . ')$/',
+                        $iterator->getSubPathName()
+                    )) {
                         continue;
                     }
                 }
 
                 // Add to archive
                 if ($item->isDir()) {
-                    $this->addEmptyDir($parent_dir . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                    $this->addEmptyDir(
+                        $parent_dir .
+                        DIRECTORY_SEPARATOR .
+                        $iterator->getSubPathName()
+                    );
                 } else {
-                    $this->addFile($item->getPathname(), $parent_dir . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+                    $this->addFile(
+                        $item->getPathname(),
+                        $parent_dir .
+                        DIRECTORY_SEPARATOR .
+                        $iterator->getSubPathName()
+                    );
                 }
             }
         }
 
         /**
          * [addFromString description]
+         *
          * @param [type] $name    [description]
          * @param [type] $content [description]
+         *
+         * @return null [description]
          */
         public function addFromString($name, $content)
         {
@@ -148,6 +180,7 @@ if ( class_exists( 'ZipArchive' ) ) {
 
         /**
          * [getArchive description]
+         *
          * @return [type] [description]
          */
         public function getArchive()

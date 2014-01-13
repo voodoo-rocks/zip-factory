@@ -40,44 +40,60 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.0
  * @link      https://github.com/yani-/zip-factory/
  */
 interface ArchiverInterface
 {
     /**
      * [__construct description]
-     * @param  [type] $file [description]
+     *
+     * @param [type] $file [description]
+     *
      * @return [type]       [description]
      */
     public function __construct($file);
 
     /**
      * [addFile description]
+     *
      * @param [type] $filepath  [description]
      * @param [type] $entryname [description]
      * @param [type] $start     [description]
      * @param [type] $length    [description]
+     *
+     * @return null [description]
      */
-    public function addFile($filepath, $entryname = NULL, $start = NULL, $length = NULL);
+    public function addFile(
+        $filepath,
+        $entryname = null,
+        $start = null,
+        $length = null
+    );
 
     /**
      * [addDir description]
+     *
      * @param [type] $path       [description]
      * @param [type] $parent_dir [description]
      * @param array  $include    [description]
+     *
+     * @return null [description]
      */
     public function addDir($path, $parent_dir = null, $include = array());
 
     /**
      * [addFromString description]
+     *
      * @param [type] $name    [description]
      * @param [type] $content [description]
+     *
+     * @return null [description]
      */
     public function addFromString($name, $content);
 
     /**
      * [getArchive description]
+     *
      * @return [type] [description]
      */
     public function getArchive();
