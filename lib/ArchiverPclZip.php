@@ -118,15 +118,19 @@ if (function_exists('gzopen')) {
         /**
          * [addDir description]
          *
-         * @param [type] $path       [description]
-         * @param [type] $parent_dir [description]
-         * @param array  $include    [description]
+         * @param [type] $path    [description]
+         * @param [type] $name    [description]
+         * @param array  $include [description]
          *
          * @return  null
          */
-        public function addDir($path, $parent_dir = null, $include = array())
+        public function addDir($path, $name = null, $include = array())
         {
-            $this->pclzip->add($path, $parent_dir);
+            $this->pclzip->add(
+                $path,
+                PCLZIP_OPT_REMOVE_PATH,
+                preg_replace('/\/' . $name . '$/', '', $path)
+            );
         }
 
         /**
