@@ -107,4 +107,11 @@ interface ArchiverInterface
      * @return [type]              [description]
      */
     public function extractTo($pathto, $files = null);
+
+    /**
+     * [close description]
+     *
+     * @return [type] [description]
+     */
+    public function close();
 }

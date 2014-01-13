@@ -200,5 +200,15 @@ if (class_exists('ZipArchive')) {
         {
             parent::extractTo($pathto);
         }
+
+        /**
+         * [close description]
+         *
+         * @return [type] [description]
+         */
+        public function close()
+        {
+            parent::close();
+        }
     }
 }

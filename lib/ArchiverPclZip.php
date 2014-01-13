@@ -175,7 +175,17 @@ if (function_exists('gzopen')) {
          */
         public function extractTo($pathto, $files = null)
         {
-            $this->archive->extract(PCLZIP_OPT_PATH, $destination);
+            $this->pclzip->extract(PCLZIP_OPT_PATH, $pathto);
+        }
+
+        /**
+         * [close description]
+         *
+         * @return [type] [description]
+         */
+        public function close()
+        {
+            // empty function - not needed for pclzip
         }
     }
 }
