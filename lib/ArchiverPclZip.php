@@ -108,8 +108,8 @@ if (function_exists('gzopen')) {
             $this->pclzip->add(
                 array(
                     array(
-                        PCLZIP_ATT_FILE_NAME    => $entryname,
-                        PCLZIP_ATT_FILE_CONTENT => file_get_contents($filepath)
+                        PCLZIP_ATT_FILE_NAME          => $filepath,
+                        PCLZIP_ATT_FILE_NEW_FULL_NAME => $entryname
                     )
                 )
             );
