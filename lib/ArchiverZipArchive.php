@@ -97,8 +97,8 @@ if (class_exists('ZipArchive')) {
             $start = null,
             $length = null
         ) {
-            if (is_resource($file)) {
-                $meta     = stream_get_meta_data($file);
+            if (is_resource($filepath)) {
+                $meta     = stream_get_meta_data($filepath);
                 $filepath = $meta['uri'];
             }
             parent::addFile($filepath, $entryname, $start, $length);
