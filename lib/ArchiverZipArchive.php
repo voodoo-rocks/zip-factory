@@ -28,7 +28,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.0.2
+ * @version   GIT: 1.0.3
  * @link      https://github.com/yani-/zip-factory/
  */
 
@@ -97,8 +97,8 @@ if (class_exists('ZipArchive')) {
             $start = null,
             $length = null
         ) {
-            if (is_resource($file)) {
-                $meta     = stream_get_meta_data($file);
+            if (is_resource($filepath)) {
+                $meta     = stream_get_meta_data($filepath);
                 $filepath = $meta['uri'];
             }
             parent::addFile($filepath, $entryname, $start, $length);
