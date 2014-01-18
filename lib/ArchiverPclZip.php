@@ -105,6 +105,10 @@ if (function_exists('gzopen')) {
             $start = null,
             $length = null
         ) {
+            if (is_resource($file)) {
+                $meta     = stream_get_meta_data($file);
+                $filepath = $meta['uri'];
+            }
             $this->pclzip->add(
                 array(
                     array(
