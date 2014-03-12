@@ -78,7 +78,7 @@ if (function_exists('gzopen')) {
          *
          * @return void
          */
-        public function __construct($file, $write = false))
+        public function __construct($file, $write = false)
         {
             if (is_resource($file)) {
                 $meta = stream_get_meta_data($file);
