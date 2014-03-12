@@ -78,7 +78,7 @@ if (class_exists('ZipArchive')) {
 
             // Open Archive File for read/write
             if ($write) {
-                if (($code = $this->open($this->archive, ZipArchive::CREATE | ZIPARCHIVE::OVERWRITE)) !== true) {
+                if (($code = $this->open($this->archive, ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true) {
                     throw new Exception('Archive file cound not be created. Return code: ' . $code);
                 }
             } else {
