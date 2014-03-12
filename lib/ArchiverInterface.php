@@ -45,13 +45,14 @@
 interface ArchiverInterface
 {
     /**
-     * [__construct description]
+     * Create instance of Zip or Pcl archiver
      *
-     * @param [type] $file [description]
+     * @param string  $file  Path to file
+     * @param boolean $write Open archive for write
      *
-     * @return [type]       [description]
+     * @return void
      */
-    public function __construct($file);
+    public function __construct($file, $write = false);
 
     /**
      * [addFile description]
