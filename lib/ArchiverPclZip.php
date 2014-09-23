@@ -121,6 +121,33 @@ if (function_exists('gzopen')) {
         }
 
         /**
+         * Add only the files in a given directory
+         *
+         * @param string $path       Path to directory
+         * @param string $parent_dir Parent path name
+         */
+        public function addDirFiles($path, $parent_dir = null)
+        {
+            $iterator = new IteratorIterator(
+                new DirectoryIterator($path)
+            );
+
+            foreach ($iterator as $item) {
+                // only files
+                if (! $iterator->isDot() && $iterator->isFile()) {
+                    $this->addFile(
+                        $item->getPathname(),
+                        $parent_dir .
+                        DIRECTORY_SEPARATOR .
+                        $iterator->getSubPathName()
+                    );
+                } else {
+                    continue;
+                }
+            }
+        }
+
+        /**
          * Add directory to archive
          *
          * @param string $path       Path to directory
