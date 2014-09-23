@@ -137,9 +137,7 @@ if (function_exists('gzopen')) {
                 if (! $iterator->isDot() && $iterator->isFile()) {
                     $this->addFile(
                         $item->getPathname(),
-                        $parent_dir .
-                        DIRECTORY_SEPARATOR .
-                        $iterator->getSubPathName()
+                        $parent_dir . DIRECTORY_SEPARATOR . $item->getFilename()
                     );
                 } else {
                     continue;
