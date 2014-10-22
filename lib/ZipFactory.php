@@ -28,7 +28,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.2.0
+ * @version   GIT: 1.3.0
  * @link      https://github.com/yani-/zip-factory/
  */
 
@@ -65,6 +65,26 @@ class ZipFactory
                          DIRECTORY_SEPARATOR .
                          'ArchiverZipArchive.php';
             return new ArchiverZipArchive($file, $write);
+        }
+    }
+
+    /**
+     * Auto create instance of Zip or Pcl archiver
+     *
+     * @param string  $file   Path to file
+     * @param boolean $write  Open archive for write
+     *
+     * @return object
+     */
+    public static function autoZipArchiver($file, $write = false)
+    {
+        // Verify ZipArchive is installed
+        $zipArchive = class_exists('ZipArchive');
+
+        try {
+            return self::makeZipArchiver($file, ! $zipArchive, $write);
+        } catch ( Exception $e ) {
+            return self::makeZipArchiver($file, $zipArchive, $write);
         }
     }
 }
