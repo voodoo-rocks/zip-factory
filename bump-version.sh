@@ -51,7 +51,7 @@ git add . && git commit -m "Bumped version from $currentVersion to $bumpedVersio
 git flow release finish -F -m "$bumpedVersion" $bumpedVersion
 
 # publish develop branch
-git checkout develop && git push origin develop
+git checkout develop && git push origin develop --force
 
 # publish master
 git checkout master && git push origin master
