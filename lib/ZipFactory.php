@@ -28,7 +28,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.3.0
+ * @version   GIT: 1.4.0
  * @link      https://github.com/yani-/zip-factory/
  */
 
@@ -69,22 +69,40 @@ class ZipFactory
     }
 
     /**
-     * Auto create instance of Zip or Pcl archiver
+     * Create Zip archive
      *
-     * @param string  $file   Path to file
-     * @param boolean $write  Open archive for write
+     * @param string $file Path to file
      *
      * @return object
      */
-    public static function autoZipArchiver($file, $write = false)
+    public static function create($file)
     {
         // Verify ZipArchive is installed
         $zipArchive = class_exists('ZipArchive');
 
         try {
-            return self::makeZipArchiver($file, ! $zipArchive, $write);
+            return self::makeZipArchiver($file, ! $zipArchive, true);
         } catch ( Exception $e ) {
-            return self::makeZipArchiver($file, $zipArchive, $write);
+            return self::makeZipArchiver($file, $zipArchive, true);
+        }
+    }
+
+    /**
+     * Open Zip archive
+     *
+     * @param string $file Path to file
+     *
+     * @return object
+     */
+    public static function open($file)
+    {
+        // Verify ZipArchive is installed
+        $zipArchive = class_exists('ZipArchive');
+
+        try {
+            return self::makeZipArchiver($file, ! $zipArchive, false);
+        } catch ( Exception $e ) {
+            return self::makeZipArchiver($file, $zipArchive, false);
         }
     }
 }

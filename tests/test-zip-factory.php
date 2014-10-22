@@ -28,7 +28,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.3.0
+ * @version   GIT: 1.4.0
  * @link      https://github.com/yani-/zip-factory/
  */
 
@@ -40,7 +40,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.3.0
+ * @version   GIT: 1.4.0
  * @link      https://github.com/yani-/zip-factory/
  */
 class ZipFactoryTest extends PHPUnit_Framework_TestCase
