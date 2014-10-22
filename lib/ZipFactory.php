@@ -67,4 +67,24 @@ class ZipFactory
             return new ArchiverZipArchive($file, $write);
         }
     }
+    
+    /**
+     * Auto create instance of Zip or Pcl archiver
+     *
+     * @param string  $file   Path to file
+     * @param boolean $write  Open archive for write
+     *
+     * @return object
+     */
+    public static function autoZipArchiver($file, $write = false)
+    {
+        // Verify ZipArchive is installed
+        $zipArchive = class_exists('ZipArchive');
+
+        try {
+            return self::makeZipArchiver($file, ! $zipArchive, $write);
+        } catch ( Exception $e ) {
+            return self::makeZipArchiver($file, $zipArchive, $write);
+        }
+    }    
 }
