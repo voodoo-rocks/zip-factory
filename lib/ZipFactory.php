@@ -28,7 +28,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.2.0
+ * @version   GIT: 1.3.0
  * @link      https://github.com/yani-/zip-factory/
  */
 
@@ -67,7 +67,7 @@ class ZipFactory
             return new ArchiverZipArchive($file, $write);
         }
     }
-    
+
     /**
      * Auto create instance of Zip or Pcl archiver
      *
@@ -86,5 +86,5 @@ class ZipFactory
         } catch ( Exception $e ) {
             return self::makeZipArchiver($file, $zipArchive, $write);
         }
-    }    
+    }
 }
