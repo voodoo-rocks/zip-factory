@@ -45,74 +45,51 @@
 interface ArchiverInterface
 {
     /**
-     * Create instance of Zip or Pcl archiver
+     * Adds a file to a ZIP archive from the given path
      *
-     * @param string  $file  Path to file
-     * @param boolean $write Open archive for write
+     * @param string $filename  The path to the file to add.
+     * @param string $localname If supplied, this is the local name inside the ZIP archive that will override the filename.
+     * @param int    $start     This parameter is not used but is required to extend ZipArchive.
+     * @param int    $length    This parameter is not used but is required to extend ZipArchive.
+     *
+     * @return boolean
+     */
+    public function addFile($filename, $localname = null, $start = 0, $length = 0);
+
+    /**
+     * Adds a directory to a ZIP archive from the given path
+     *
+     * @param string $pathname  The path to the file to add.
+     * @param string $localname If supplied, this is the local name inside the ZIP archive that will override the pathname.
      *
      * @return void
      */
-    public function __construct($file, $write = false);
+    public function addDir($pathname, $localname = null);
 
     /**
-     * [addFile description]
+     *  Add a file to a ZIP archive using its contents
      *
-     * @param [type] $filepath  [description]
-     * @param [type] $entryname [description]
-     * @param [type] $start     [description]
-     * @param [type] $length    [description]
+     * @param string $localname The name of the entry to create.
+     * @param string $contents  The contents to use to create the entry. It is used in a binary safe mode.
      *
-     * @return null [description]
+     * @return boolean
      */
-    public function addFile(
-        $filepath,
-        $entryname = null,
-        $start = null,
-        $length = null
-    );
+    public function addFromString($localname , $contents);
 
     /**
-     * [addDir description]
+     * Extract the archive contents
      *
-     * @param [type] $path       [description]
-     * @param [type] $parent_dir [description]
-     * @param array  $include    [description]
+     * @param string $destination Location where to extract the files.
+     * @param mixed  $entities    The entries to extract. It accepts either a single entry name or an array of names.
      *
-     * @return null [description]
+     * @return boolean
      */
-    public function addDir($path, $parent_dir = null, $include = array());
+    public function extractTo($destination, $entities = null);
 
     /**
-     * [addFromString description]
+     * Close the active archive (opened or newly created)
      *
-     * @param [type] $name    [description]
-     * @param [type] $content [description]
-     *
-     * @return null [description]
-     */
-    public function addFromString($name, $content);
-
-    /**
-     * [getArchive description]
-     *
-     * @return [type] [description]
-     */
-    public function getArchive();
-
-    /**
-     * [extractTo description]
-     *
-     * @param string $pathto Path to extract to
-     * @param mixed  $files  Optional files parameter
-     *
-     * @return [type]              [description]
-     */
-    public function extractTo($pathto, $files = null);
-
-    /**
-     * [close description]
-     *
-     * @return [type] [description]
+     * @return boolean
      */
     public function close();
 }

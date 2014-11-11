@@ -35,6 +35,7 @@
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 
 if (class_exists('ZipArchive')) {
+
     /**
      * ArchiverZipArchive class
      *
@@ -48,125 +49,41 @@ if (class_exists('ZipArchive')) {
     class ArchiverZipArchive extends ZipArchive implements ArchiverInterface
     {
         /**
-         * [$archive description]
-         * @var [type]
-         */
-        protected $archive  = null;
-
-        /**
-         * [$root_dir description]
-         * @var [type]
-         */
-        protected $root_dir = null;
-
-        /**
-         * Create instance of Zip archiver
+         * Create instance of ZipArchive
          *
-         * @param string  $file  Path to file
-         * @param boolean $write Open archive for write
+         * @param string  $filename  The file name of the ZIP archive to open.
+         * @param boolean $write     The mode to use to open the archive.
          *
          * @return void
          */
-        public function __construct($file, $write = false)
+        public function __construct($filename, $write = false)
         {
-            if (is_resource($file)) {
-                $meta = stream_get_meta_data($file);
-                $this->archive = $meta['uri'];
-            } else {
-                $this->archive = $file;
-            }
-
-            // Open Archive File for read/write
             if ($write) {
-                if (($code = $this->open($this->archive, ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true) {
+                if (($code = $this->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true) {
                     throw new Exception('Archive file cound not be created. Return code: ' . $code);
                 }
             } else {
-                if (($code = $this->open($this->archive)) !== true) {
+                if (($code = $this->open($filename)) !== true) {
                     throw new Exception('Archive file cound not be opened. Return code: ' . $code);
                 }
             }
         }
 
         /**
-         * [addFile description]
+         * Adds a directory to a ZIP archive from the given path
          *
-         * @param [type] $filepath  [description]
-         * @param [type] $entryname [description]
-         * @param [type] $start     [description]
-         * @param [type] $length    [description]
-         *
-         * @return  null [description]
-         */
-        public function addFile(
-            $filepath,
-            $entryname = null,
-            $start = null,
-            $length = null
-        ) {
-            if (is_resource($filepath)) {
-                $meta     = stream_get_meta_data($filepath);
-                $filepath = $meta['uri'];
-            }
-            parent::addFile($filepath, $entryname, $start, $length);
-        }
-
-        /**
-         * Add only the files in a given directory
-         *
-         * @param string $path       Path to directory
-         * @param string $parent_dir Parent path name
-         */
-        public function addDirFiles($path, $parent_dir = null)
-        {
-            $iterator = new IteratorIterator(
-                new DirectoryIterator($path)
-            );
-
-            foreach ($iterator as $item) {
-                // only files
-                if (! $iterator->isDot() && $iterator->isFile()) {
-                    $this->addFile(
-                        $item->getPathname(),
-                        $parent_dir . DIRECTORY_SEPARATOR . $item->getFilename()
-                    );
-                } else {
-                    continue;
-                }
-            }
-        }
-
-        /**
-         * Add directory to archive
-         *
-         * @param string $path        Path to directory
-         * @param string $parent_dir  Parent path name
-         * @param array  $include     Include specific directories
+         * @param string $pathname  The path to the file to add.
+         * @param string $localname If supplied, this is the local name inside the ZIP archive that will override the pathname.
          *
          * @return void
          */
-        public function addDir($path, $parent_dir = null, $include = array())
+        public function addDir($pathname, $localname = null)
         {
             // Use Recursive functions
             $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($path),
+                new RecursiveDirectoryIterator($pathname),
                 RecursiveIteratorIterator::SELF_FIRST
             );
-
-            // Prepare filter pattern
-            $filter_pattern = null;
-            if (is_array($include)) {
-                $filters = array();
-                foreach ($include as $filter) {
-                    $filters[] = sprintf(
-                        '(%s(%s.*)?)',
-                        preg_quote( $filter, '/' ),
-                        preg_quote( DIRECTORY_SEPARATOR, '/' )
-                    );
-                }
-
-                $filter_pattern = implode( '|', $filters );
-            }
 
             foreach ($iterator as $item) {
                 // Skip dots
@@ -174,75 +91,18 @@ if (class_exists('ZipArchive')) {
                     continue;
                 }
 
-                // Validate filter pattern
-                if ($filter_pattern) {
-                    if (!preg_match('/^' . $filter_pattern . '$/', $iterator->getSubPathName())) {
-                        continue;
-                    }
-                }
-
                 // Add to archive
                 if ($item->isDir()) {
                     $this->addEmptyDir(
-                        $parent_dir .
-                        DIRECTORY_SEPARATOR .
-                        $iterator->getSubPathName()
+                        $localname . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
                     );
                 } else {
                     $this->addFile(
                         $item->getPathname(),
-                        $parent_dir .
-                        DIRECTORY_SEPARATOR .
-                        $iterator->getSubPathName()
+                        $localname . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
                     );
                 }
             }
-        }
-
-        /**
-         * [addFromString description]
-         *
-         * @param [type] $name    [description]
-         * @param [type] $content [description]
-         *
-         * @return null [description]
-         */
-        public function addFromString($name, $content)
-        {
-            parent::addFromString($name, $content);
-        }
-
-        /**
-         * [getArchive description]
-         *
-         * @return [type] [description]
-         */
-        public function getArchive()
-        {
-            return $this->archive;
-        }
-
-        /**
-         * [extractTo description]
-         *
-         * @param string $pathto Path to extract to
-         * @param mixed  $files  Optional files parameter
-         *
-         * @return [type]              [description]
-         */
-        public function extractTo($pathto, $files = null)
-        {
-            parent::extractTo($pathto);
-        }
-
-        /**
-         * [close description]
-         *
-         * @return [type] [description]
-         */
-        public function close()
-        {
-            parent::close();
         }
     }
 }
