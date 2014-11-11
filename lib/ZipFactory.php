@@ -59,7 +59,7 @@ class ZipFactory
             include_once dirname(__FILE__) .
                          DIRECTORY_SEPARATOR .
                          'ArchiverPclZip.php';
-            return new ArchiverPclZip($file, $write);
+            return new ArchiverPclZip($file);
         } else {
             include_once dirname(__FILE__) .
                          DIRECTORY_SEPARATOR .

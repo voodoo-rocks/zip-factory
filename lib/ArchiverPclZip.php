@@ -55,8 +55,27 @@ if (!class_exists('PclZip')) {
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
  * @link      https://github.com/yani-/zip-factory/
  */
-class ArchiverPclZip extends PclZip implements ArchiverInterface
+class ArchiverPclZip implements ArchiverInterface
 {
+    /**
+     * PclZip object
+     *
+     * @var PclZip
+     */
+    protected $pclZip = null;
+
+    /**
+     * Create instance of PclZip
+     *
+     * @param string $filename The file name of the ZIP archive to open.
+     *
+     * @return void
+     */
+    public function __construct($filename)
+    {
+        $this->pclZip = new PclZip;
+    }
+
     /**
      * Adds a file to a ZIP archive from the given path
      *
@@ -67,8 +86,9 @@ class ArchiverPclZip extends PclZip implements ArchiverInterface
      *
      * @return boolean
      */
-    public function addFile($filename, $localname = null, $start = 0, $length = 0) {
-        return $this->add(
+    public function addFile($filename, $localname = null, $start = 0, $length = 0)
+    {
+        return $this->pclZip->add(
             array(
                 array(
                     PCLZIP_ATT_FILE_NAME          => $filename,
@@ -88,7 +108,7 @@ class ArchiverPclZip extends PclZip implements ArchiverInterface
      */
     public function addDir($pathname, $localname = null)
     {
-        return $this->add(
+        return $this->pclZip->add(
             $pathname,
             PCLZIP_OPT_REMOVE_PATH,
             $pathname,
@@ -107,7 +127,7 @@ class ArchiverPclZip extends PclZip implements ArchiverInterface
      */
     public function addFromString($localname , $contents)
     {
-        return $this->add(
+        return $this->pclZip->add(
             array(
                 array(
                     PCLZIP_ATT_FILE_NAME    => $localname,
@@ -128,9 +148,17 @@ class ArchiverPclZip extends PclZip implements ArchiverInterface
     public function extractTo($destination, $entities = null)
     {
         if ($entities) {
-            return $this->extract(PCLZIP_OPT_PATH, $destination, PCLZIP_OPT_BY_NAME, $entities);
+            return $this->pclZip->extract(
+                PCLZIP_OPT_PATH,
+                $destination,
+                PCLZIP_OPT_BY_NAME,
+                $entities
+            );
         } else {
-            return $this->extract(PCLZIP_OPT_PATH, $destination);
+            return $this->pclZip->extract(
+                PCLZIP_OPT_PATH,
+                $destination
+            );
         }
     }
 
@@ -141,6 +169,6 @@ class ArchiverPclZip extends PclZip implements ArchiverInterface
      */
     public function close()
     {
-        return $this->privCloseFd();
+        return $this->pclZip->privCloseFd();
     }
 }
