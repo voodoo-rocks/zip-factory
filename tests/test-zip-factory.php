@@ -51,10 +51,12 @@ class ZipFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function testMakeZipArchiver()
     {
-        $archiver = ZipFactory::makeZipArchiver(tmpfile());
+        $tmpfile = tempnam(sys_get_temp_dir(), 'zip_');
+        $archiver = ZipFactory::makeZipArchiver($tmpfile);
         $this->assertTrue($archiver instanceof ArchiverZipArchive);
 
-        $archiver = ZipFactory::makeZipArchiver(tmpfile(), true);
+        $tmpfile = tempnam(sys_get_temp_dir(), 'zip_');
+        $archiver = ZipFactory::makeZipArchiver($tmpfile, true);
         $this->assertTrue($archiver instanceof ArchiverPclZip);
     }
 }
