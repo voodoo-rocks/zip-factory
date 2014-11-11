@@ -28,7 +28,7 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.4.0
+ * @version   GIT: 1.5.0
  * @link      https://github.com/yani-/zip-factory/
  */
 
@@ -59,7 +59,7 @@ class ZipFactory
             include_once dirname(__FILE__) .
                          DIRECTORY_SEPARATOR .
                          'ArchiverPclZip.php';
-            return new ArchiverPclZip($file, $write);
+            return new ArchiverPclZip($file);
         } else {
             include_once dirname(__FILE__) .
                          DIRECTORY_SEPARATOR .

@@ -28,221 +28,143 @@
  * @author    Yani Iliev <yani@iliev.me>
  * @copyright 2014 Yani Iliev
  * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
- * @version   GIT: 1.4.0
+ * @version   GIT: 1.5.0
  * @link      https://github.com/yani-/zip-factory/
  */
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 
-if (class_exists('ZipArchive')) {
+/**
+ * ArchiverZipArchive class
+ *
+ * @category  Tests
+ * @package   ZipFactory
+ * @author    Yani Iliev <yani@iliev.me>
+ * @copyright 2014 Yani Iliev
+ * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
+ * @link      https://github.com/yani-/zip-factory/
+ */
+class ArchiverZipArchive implements ArchiverInterface
+{
     /**
-     * ArchiverZipArchive class
+     * ZipArchive object
      *
-     * @category  Tests
-     * @package   ZipFactory
-     * @author    Yani Iliev <yani@iliev.me>
-     * @copyright 2014 Yani Iliev
-     * @license   https://raw.github.com/yani-/zip-factory/master/LICENSE The MIT License (MIT)
-     * @link      https://github.com/yani-/zip-factory/
+     * @var ZipArchive
      */
-    class ArchiverZipArchive extends ZipArchive implements ArchiverInterface
+    protected $zipArchive = null;
+
+    /**
+     * Create instance of ZipArchive
+     *
+     * @param string  $filename The file name of the ZIP archive to open.
+     * @param boolean $write    The mode to use to open the archive.
+     *
+     * @return void
+     */
+    public function __construct($filename, $write = false)
     {
-        /**
-         * [$archive description]
-         * @var [type]
-         */
-        protected $archive  = null;
+        $this->zipArchive = new ZipArchive;
 
-        /**
-         * [$root_dir description]
-         * @var [type]
-         */
-        protected $root_dir = null;
+        // Open file
+        if ($write) {
+            if (($code = $this->zipArchive->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true) {
+                throw new Exception('Archive file cound not be created. Return code: ' . $code);
+            }
+        } else {
+            if (($code = $this->zipArchive->open($filename)) !== true) {
+                throw new Exception('Archive file cound not be opened. Return code: ' . $code);
+            }
+        }
+    }
 
-        /**
-         * Create instance of Zip archiver
-         *
-         * @param string  $file  Path to file
-         * @param boolean $write Open archive for write
-         *
-         * @return void
-         */
-        public function __construct($file, $write = false)
-        {
-            if (is_resource($file)) {
-                $meta = stream_get_meta_data($file);
-                $this->archive = $meta['uri'];
+    /**
+     * Adds a file to a ZIP archive from the given path
+     *
+     * @param string $filename  The path to the file to add.
+     * @param string $localname If supplied, this is the local name inside the ZIP archive that will override the filename.
+     * @param int    $start     This parameter is not used but is required to extend ZipArchive.
+     * @param int    $length    This parameter is not used but is required to extend ZipArchive.
+     *
+     * @return boolean
+     */
+    public function addFile($filename, $localname = null, $start = 0, $length = 0)
+    {
+        return $this->zipArchive->addFile($filename, $localname, $start, $length);
+    }
+
+    /**
+     * Adds a directory to a ZIP archive from the given path
+     *
+     * @param string $pathname  The path to the file to add.
+     * @param string $localname If supplied, this is the local name inside the ZIP archive that will override the pathname.
+     *
+     * @return void
+     */
+    public function addDir($pathname, $localname = null)
+    {
+        // Use Recursive functions
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($pathname),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $item) {
+            // Skip dots
+            if ($iterator->isDot()) {
+                continue;
+            }
+
+            // Add to archive
+            if ($item->isDir()) {
+                $this->zipArchive->addEmptyDir(
+                    $localname . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
+                );
             } else {
-                $this->archive = $file;
-            }
-
-            // Open Archive File for read/write
-            if ($write) {
-                if (($code = $this->open($this->archive, ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true) {
-                    throw new Exception('Archive file cound not be created. Return code: ' . $code);
-                }
-            } else {
-                if (($code = $this->open($this->archive)) !== true) {
-                    throw new Exception('Archive file cound not be opened. Return code: ' . $code);
-                }
+                $this->zipArchive->addFile(
+                    $item->getPathname(),
+                    $localname . DIRECTORY_SEPARATOR . $iterator->getSubPathName()
+                );
             }
         }
+    }
 
-        /**
-         * [addFile description]
-         *
-         * @param [type] $filepath  [description]
-         * @param [type] $entryname [description]
-         * @param [type] $start     [description]
-         * @param [type] $length    [description]
-         *
-         * @return  null [description]
-         */
-        public function addFile(
-            $filepath,
-            $entryname = null,
-            $start = null,
-            $length = null
-        ) {
-            if (is_resource($filepath)) {
-                $meta     = stream_get_meta_data($filepath);
-                $filepath = $meta['uri'];
-            }
-            parent::addFile($filepath, $entryname, $start, $length);
+    /**
+     *  Add a file to a ZIP archive using its contents
+     *
+     * @param string $localname The name of the entry to create.
+     * @param string $contents  The contents to use to create the entry. It is used in a binary safe mode.
+     *
+     * @return boolean
+     */
+    public function addFromString($localname , $contents)
+    {
+        return $this->zipArchive->addFromString($localname, $contents);
+    }
+
+    /**
+     * Extract the archive contents
+     *
+     * @param string $destination Location where to extract the files.
+     * @param mixed  $entities    The entries to extract. It accepts either a single entry name or an array of names.
+     *
+     * @return boolean
+     */
+    public function extractTo($destination, $entities = null)
+    {
+        if ($entities) {
+            return $this->zipArchive->extractTo($destination, $entities);
+        } else {
+            return $this->zipArchive->extractTo($destination);
         }
+    }
 
-        /**
-         * Add only the files in a given directory
-         *
-         * @param string $path       Path to directory
-         * @param string $parent_dir Parent path name
-         */
-        public function addDirFiles($path, $parent_dir = null)
-        {
-            $iterator = new IteratorIterator(
-                new DirectoryIterator($path)
-            );
-
-            foreach ($iterator as $item) {
-                // only files
-                if (! $iterator->isDot() && $iterator->isFile()) {
-                    $this->addFile(
-                        $item->getPathname(),
-                        $parent_dir . DIRECTORY_SEPARATOR . $item->getFilename()
-                    );
-                } else {
-                    continue;
-                }
-            }
-        }
-
-        /**
-         * Add directory to archive
-         *
-         * @param string $path        Path to directory
-         * @param string $parent_dir  Parent path name
-         * @param array  $include     Include specific directories
-         *
-         * @return void
-         */
-        public function addDir($path, $parent_dir = null, $include = array())
-        {
-            // Use Recursive functions
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($path),
-                RecursiveIteratorIterator::SELF_FIRST
-            );
-
-            // Prepare filter pattern
-            $filter_pattern = null;
-            if (is_array($include)) {
-                $filters = array();
-                foreach ($include as $filter) {
-                    $filters[] = sprintf(
-                        '(%s(%s.*)?)',
-                        preg_quote( $filter, '/' ),
-                        preg_quote( DIRECTORY_SEPARATOR, '/' )
-                    );
-                }
-
-                $filter_pattern = implode( '|', $filters );
-            }
-
-            foreach ($iterator as $item) {
-                // Skip dots
-                if ($iterator->isDot()) {
-                    continue;
-                }
-
-                // Validate filter pattern
-                if ($filter_pattern) {
-                    if (!preg_match('/^' . $filter_pattern . '$/', $iterator->getSubPathName())) {
-                        continue;
-                    }
-                }
-
-                // Add to archive
-                if ($item->isDir()) {
-                    $this->addEmptyDir(
-                        $parent_dir .
-                        DIRECTORY_SEPARATOR .
-                        $iterator->getSubPathName()
-                    );
-                } else {
-                    $this->addFile(
-                        $item->getPathname(),
-                        $parent_dir .
-                        DIRECTORY_SEPARATOR .
-                        $iterator->getSubPathName()
-                    );
-                }
-            }
-        }
-
-        /**
-         * [addFromString description]
-         *
-         * @param [type] $name    [description]
-         * @param [type] $content [description]
-         *
-         * @return null [description]
-         */
-        public function addFromString($name, $content)
-        {
-            parent::addFromString($name, $content);
-        }
-
-        /**
-         * [getArchive description]
-         *
-         * @return [type] [description]
-         */
-        public function getArchive()
-        {
-            return $this->archive;
-        }
-
-        /**
-         * [extractTo description]
-         *
-         * @param string $pathto Path to extract to
-         * @param mixed  $files  Optional files parameter
-         *
-         * @return [type]              [description]
-         */
-        public function extractTo($pathto, $files = null)
-        {
-            parent::extractTo($pathto);
-        }
-
-        /**
-         * [close description]
-         *
-         * @return [type] [description]
-         */
-        public function close()
-        {
-            parent::close();
-        }
+    /**
+     * Close the active archive (opened or newly created)
+     *
+     * @return boolean
+     */
+    public function close()
+    {
+        return $this->zipArchive->close();
     }
 }
