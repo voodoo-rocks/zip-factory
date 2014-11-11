@@ -73,7 +73,7 @@ class ArchiverPclZip implements ArchiverInterface
      */
     public function __construct($filename)
     {
-        $this->pclZip = new PclZip;
+        $this->pclZip = new PclZip($filename);
     }
 
     /**

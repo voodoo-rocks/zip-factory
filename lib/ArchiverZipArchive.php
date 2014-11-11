@@ -65,6 +65,7 @@ class ArchiverZipArchive implements ArchiverInterface
     {
         $this->zipArchive = new ZipArchive;
 
+        // Open file
         if ($write) {
             if (($code = $this->zipArchive->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true) {
                 throw new Exception('Archive file cound not be created. Return code: ' . $code);
