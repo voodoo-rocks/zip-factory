@@ -1,9 +1,5 @@
 # Zip Factory
 
-[![Build Status](https://travis-ci.org/yani-/zip-factory.png)](https://travis-ci.org/yani-/zip-factory)
-[![Latest Stable Version](https://poser.pugx.org/zip-factory/zip-factory/v/stable.png)](https://packagist.org/packages/zip-factory/zip-factory)
-[![Total Downloads](https://poser.pugx.org/zip-factory/zip-factory/downloads.png)](https://packagist.org/packages/zip-factory/zip-factory)
-
 Factory class that creates either ZipArchive or PclZip
 
 ### Requirements
@@ -29,3 +25,4 @@ MIT
 
 ### Authors
 * Yani Iliev
+* Oleg Shabashov
