@@ -3,26 +3,21 @@
 
 /**
  * ArchiverZipArchive class file
- *
  * PHP version 5
- *
  * LICENSE: Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
  * of the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
  * @category  Utilities
  * @package   ZipFactory
  * @author    Yani Iliev <yani@iliev.me>
@@ -36,7 +31,6 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 
 /**
  * ArchiverZipArchive class
- *
  * @category  Tests
  * @package   ZipFactory
  * @author    Yani Iliev <yani@iliev.me>
@@ -48,7 +42,6 @@ class ArchiverZipArchive implements ArchiverInterface
 {
     /**
      * ZipArchive object
-     *
      * @var ZipArchive
      */
     protected $zipArchive = null;
@@ -59,7 +52,7 @@ class ArchiverZipArchive implements ArchiverInterface
      * @param string  $filename The file name of the ZIP archive to open.
      * @param boolean $write    The mode to use to open the archive.
      *
-     * @return void
+     * @throws Exception
      */
     public function __construct($filename, $write = false)
     {
@@ -136,7 +129,7 @@ class ArchiverZipArchive implements ArchiverInterface
      *
      * @return boolean
      */
-    public function addFromString($localname , $contents)
+    public function addFromString($localname, $contents)
     {
         return $this->zipArchive->addFromString($localname, $contents);
     }
@@ -160,7 +153,6 @@ class ArchiverZipArchive implements ArchiverInterface
 
     /**
      * Close the active archive (opened or newly created)
-     *
      * @return boolean
      */
     public function close()

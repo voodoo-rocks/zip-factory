@@ -1,9 +1,9 @@
 {
-    "name": "zip-factory/zip-factory",
+    "name": "voodoo-mobile/zip-factory",
     "type": "library",
     "description": "Factory class that creates either ZipArchive or PclZip PHP 5.2.17 and up",
     "keywords": ["ziparchive", "zip", "zipfactory"],
-    "homepage": "http://github.com/yani-/zip-factory",
+    "homepage": "https://github.com/voodoo-mobile/zip-factory",
     "license": "MIT",
     "authors": [
         {
@@ -11,8 +11,18 @@
             "email": "yani@iliev.me",
             "homepage": "https://yani.iliev.me",
             "role": "developer"
+        },
+        {
+            "name": "Oleg Shabashov",
+            "email": "oleg.shabashov@gmail.com",
+            "role": "developer"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "voodoo-mobile\\zip-factory\\": "lib/"
+        }
+    },
     "require": {
         "php": ">=5.2.0"
     }

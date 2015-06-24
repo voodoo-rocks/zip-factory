@@ -3,26 +3,21 @@
 
 /**
  * ArchiverPclZip class file
- *
  * PHP version 5
- *
  * LICENSE: Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"), to
  * deal in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
  * of the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
  * @category  Utilities
  * @package   ZipFactory
  * @author    Yani Iliev <yani@iliev.me>
@@ -36,18 +31,11 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
 
 // Load PclZip library
 if (!class_exists('PclZip')) {
-    include_once dirname(__FILE__) .
-                 DIRECTORY_SEPARATOR .
-                 'vendor' .
-                 DIRECTORY_SEPARATOR .
-                 'pclzip-2-8-2' .
-                 DIRECTORY_SEPARATOR .
-                 'pclzip.lib.php';
+    include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'pclzip-2-8-2' . DIRECTORY_SEPARATOR . 'pclzip.lib.php';
 }
 
 /**
  * ArchiverPclZip class
- *
  * @category  Tests
  * @package   ZipFactory
  * @author    Yani Iliev <yani@iliev.me>
@@ -59,7 +47,6 @@ class ArchiverPclZip implements ArchiverInterface
 {
     /**
      * PclZip object
-     *
      * @var PclZip
      */
     protected $pclZip = null;
@@ -68,8 +55,6 @@ class ArchiverPclZip implements ArchiverInterface
      * Create instance of PclZip
      *
      * @param string $filename The file name of the ZIP archive to open.
-     *
-     * @return void
      */
     public function __construct($filename)
     {
@@ -89,12 +74,12 @@ class ArchiverPclZip implements ArchiverInterface
     public function addFile($filename, $localname = null, $start = 0, $length = 0)
     {
         return $this->pclZip->add(
-            array(
-                array(
+            [
+                [
                     PCLZIP_ATT_FILE_NAME          => $filename,
                     PCLZIP_ATT_FILE_NEW_FULL_NAME => $localname,
-                )
-            )
+                ]
+            ]
         );
     }
 
@@ -108,13 +93,7 @@ class ArchiverPclZip implements ArchiverInterface
      */
     public function addDir($pathname, $localname = null)
     {
-        return $this->pclZip->add(
-            $pathname,
-            PCLZIP_OPT_REMOVE_PATH,
-            $pathname,
-            PCLZIP_OPT_ADD_PATH,
-            $localname
-        );
+        return $this->pclZip->add($pathname, PCLZIP_OPT_REMOVE_PATH, $pathname, PCLZIP_OPT_ADD_PATH, $localname);
     }
 
     /**
@@ -125,15 +104,15 @@ class ArchiverPclZip implements ArchiverInterface
      *
      * @return boolean
      */
-    public function addFromString($localname , $contents)
+    public function addFromString($localname, $contents)
     {
         return $this->pclZip->add(
-            array(
-                array(
+            [
+                [
                     PCLZIP_ATT_FILE_NAME    => $localname,
                     PCLZIP_ATT_FILE_CONTENT => $contents,
-                )
-            )
+                ]
+            ]
         );
     }
 
@@ -164,7 +143,6 @@ class ArchiverPclZip implements ArchiverInterface
 
     /**
      * Close the active archive (opened or newly created)
-     *
      * @return boolean
      */
     public function close()
