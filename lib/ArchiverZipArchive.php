@@ -1,5 +1,8 @@
 <?php
-namespace voodoo_mobile\zip_factory;
+namespace zip_factory;
+
+use Exception;
+use ZipArchive;
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
@@ -29,8 +32,6 @@ namespace voodoo_mobile\zip_factory;
  * @link      https://github.com/yani-/zip-factory/
  */
 
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
-
 /**
  * ArchiverZipArchive class
  * @category  Tests
@@ -44,7 +45,7 @@ class ArchiverZipArchive implements ArchiverInterface
 {
     /**
      * ZipArchive object
-     * @var ZipArchive
+     * @var \ZipArchive
      */
     protected $zipArchive = null;
 
@@ -58,16 +59,16 @@ class ArchiverZipArchive implements ArchiverInterface
      */
     public function __construct($filename, $write = false)
     {
-        $this->zipArchive = new ZipArchive;
+        $this->zipArchive = new \ZipArchive;
 
         // Open file
         if ($write) {
             if (($code = $this->zipArchive->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE)) !== true) {
-                throw new Exception('Archive file cound not be created. Return code: ' . $code);
+                throw new \Exception('Archive file cound not be created. Return code: ' . $code);
             }
         } else {
             if (($code = $this->zipArchive->open($filename)) !== true) {
-                throw new Exception('Archive file cound not be opened. Return code: ' . $code);
+                throw new \Exception('Archive file cound not be opened. Return code: ' . $code);
             }
         }
     }
@@ -98,9 +99,9 @@ class ArchiverZipArchive implements ArchiverInterface
     public function addDir($pathname, $localname = null)
     {
         // Use Recursive functions
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($pathname),
-            RecursiveIteratorIterator::SELF_FIRST
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($pathname),
+            \RecursiveIteratorIterator::SELF_FIRST
         );
 
         foreach ($iterator as $item) {

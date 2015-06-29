@@ -1,5 +1,5 @@
 <?php
-namespace voodoo_mobile\zip_factory;
+namespace zip_factory;
 
 // --------------------------------------------------------------------------------
 // PhpConcept Library - Zip Module 2.8.2
