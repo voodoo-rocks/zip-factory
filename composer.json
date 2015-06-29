@@ -20,7 +20,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "voodoo-mobile\\zip-factory\\": "lib/"
+            "voodoo_mobile\\zip-factory\\": "lib/"
         }
     },
     "require": {
