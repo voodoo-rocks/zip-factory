@@ -1,7 +1,5 @@
 <?php
-namespace voodoo_mobile\zip_factory;
-
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+namespace zip_factory;
 
 /**
  * Zip Factory main file
@@ -52,12 +50,8 @@ class ZipFactory
     public static function makeZipArchiver($file, $pclZip = false, $write = false)
     {
         if ($pclZip) {
-            include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverPclZip.php';
-
             return new ArchiverPclZip($file);
         } else {
-            include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverZipArchive.php';
-
             return new ArchiverZipArchive($file, $write);
         }
     }
@@ -76,7 +70,7 @@ class ZipFactory
 
         try {
             return self::makeZipArchiver($file, !$zipArchive, true);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return self::makeZipArchiver($file, $zipArchive, true);
         }
     }
@@ -95,7 +89,7 @@ class ZipFactory
 
         try {
             return self::makeZipArchiver($file, !$zipArchive, false);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return self::makeZipArchiver($file, $zipArchive, false);
         }
     }

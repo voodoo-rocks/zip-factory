@@ -1,5 +1,5 @@
 <?php
-namespace voodoo_mobile\zip_factory;
+namespace zip_factory;
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
@@ -29,12 +29,6 @@ namespace voodoo_mobile\zip_factory;
  * @link      https://github.com/yani-/zip-factory/
  */
 
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ArchiverInterface.php';
-
-// Load PclZip library
-if (!class_exists('PclZip')) {
-    include_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'pclzip-2-8-2' . DIRECTORY_SEPARATOR . 'pclzip.lib.php';
-}
 
 /**
  * ArchiverPclZip class
